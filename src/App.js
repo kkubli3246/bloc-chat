@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import * as firebase from 'firebase';
-import RoomList from './components';
+
+import RoomList from './components/RoomList';
 
 // Initialize Firebase
-  var config = {
+  const config = {
     apiKey: "AIzaSyD4bpzDfvsj6KiP7E7bhzDh_Fq54zRTTTs",
     authDomain: "blocchat-rooms.firebaseapp.com",
     databaseURL: "https://blocchat-rooms.firebaseio.com",
@@ -12,23 +13,16 @@ import RoomList from './components';
     storageBucket: "blocchat-rooms.appspot.com",
     messagingSenderId: "389662709234"
   };
-  firebase.initializeApp(config);
-
-
-
+  
 
 class App extends Component {
-
-  constructor(props){
-    super(props);
-    this.state = {
-      rooms: []
-    };
-  }
+   
+  
   render() {
     return (
       <div className="App">
-       <RoomList rooms ="firebase"/>
+        <h1>Bloc Chat</h1>
+        <RoomList firebase ={firebase.initializeApp(config)}/>
       </div>
     );
   }
