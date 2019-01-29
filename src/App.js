@@ -3,6 +3,9 @@ import './App.css';
 import * as firebase from 'firebase';
 
 import RoomList from './components/RoomList';
+import MessageList from './components/MessageList';
+import 'bootstrap';
+import 'hover.css';
 
 // Initialize Firebase
   const config = {
@@ -13,16 +16,34 @@ import RoomList from './components/RoomList';
     storageBucket: "blocchat-rooms.appspot.com",
     messagingSenderId: "389662709234"
   };
-  
-
+  const db = firebase.initializeApp(config);
+ 
 class App extends Component {
    
+  constructor(props){
+    super(props);
+    this.state ={
+      activeRoom: '',
+      newActiveRoom: ''
+    }
+  }
+  setActiveRoom = (room) =>{
+    this.setState({activeRoom:room})        
+  }
   
-  render() {
+  
+  render() {    
     return (
       <div className="App">
-        <h1>Bloc Chat</h1>
-        <RoomList firebase ={firebase.initializeApp(config)}/>
+      <h1>Bloc Chat</h1>
+      <div className= 'container'>
+      <div className = 'row'>
+        
+        <div className ="col"><RoomList firebase ={db} setActiveRoom = {this.setActiveRoom} /></div>
+        <div className ="col"><MessageList firebase ={db} currentActiveRoom = {this.state.activeRoom} /></div>
+        
+      </div>
+      </div>
       </div>
     );
   }
