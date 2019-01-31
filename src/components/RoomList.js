@@ -47,10 +47,10 @@ class RoomList extends Component {
             newRoomName: e.target.value
         })
     }
-    handleClick = (index) =>{
-          
-        this.props.setActiveRoom(index);           
+    handleClick = (room) =>{       
+        this.props.setActiveRoom(room);           
     }
+
     handleMouseEnter = (index) =>{
         this.setState({isHover: index});
     }
@@ -65,7 +65,7 @@ class RoomList extends Component {
                 <h2 key={i}
                     onMouseEnter={() => this.handleMouseEnter(i)}
                     onMouseLeave={() => this.handleMouseLeave(i)}
-                    onClick={() => this.handleClick(i)}>                    
+                    onClick={() => this.handleClick(room,i)}>                    
                     <div className={this.state.isHover === i ? "active hvr-pulse hvr-sweep-to-right":""}>{room.name}</div>
                 </h2>
              )}

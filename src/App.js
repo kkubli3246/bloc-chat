@@ -16,31 +16,31 @@ import 'hover.css';
     storageBucket: "blocchat-rooms.appspot.com",
     messagingSenderId: "389662709234"
   };
-  const db = firebase.initializeApp(config);
+  let db = firebase.initializeApp(config);
  
 class App extends Component {
    
   constructor(props){
     super(props);
     this.state ={
-      activeRoom: '',
-      newActiveRoom: ''
+      activeRoom: 1
     }
   }
   setActiveRoom = (room) =>{
-    this.setState({activeRoom:room})        
+    this.setState({activeRoom:room.key})
   }
   
   
   render() {    
+    console.log(this.state.activeRoom)
     return (
       <div className="App">
       <h1>Bloc Chat</h1>
-      <div className= 'container'>
+      <div className= 'container-fluid'>
       <div className = 'row'>
         
-        <div className ="col"><RoomList firebase ={db} setActiveRoom = {this.setActiveRoom} /></div>
-        <div className ="col"><MessageList firebase ={db} currentActiveRoom = {this.state.activeRoom} /></div>
+        <div className ="col-sm-3"><RoomList firebase ={db} setActiveRoom = {(e) => this.setActiveRoom(e)} /></div>
+        <div className ="col-sm-9"><MessageList firebase ={db} currentActiveRoom = {this.state.activeRoom} /></div>
         
       </div>
       </div>
