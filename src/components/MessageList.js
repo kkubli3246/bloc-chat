@@ -4,35 +4,28 @@ class MessageList extends Component{
     constructor(props){
         super(props);
         this.state = {
-            messages: [],
-            
+            messages: this.props.roomMessages
+        }    
+    }
+    componentWillReceiveProps = (nextProps) =>{
+        if(nextProps.roomMessages !== this.props.roomMessages){
+            this.setState({messages: nextProps.roomMessages})
         }
-        this.messageRef = this.props.firebase.database().ref('rooms/'+this.props.currentActiveRoom+'/messages');
     }
-
-    componentDidMount(){
-        this.messageRef.on('child_added', snap => {
-            const messages = snap.val();
-            messages.key = snap.key;
-            this.setState({
-                messages: this.state.messages.concat(messages)                
-            })           
-        });      
+    displayMessages = () => {
+        if(this.state.messages !== undefined){
+            return this.state.messages.map((message, i) => 
+                <h3>{message.content}</h3>
+            );
+        }
     }
-    handleChange = () =>{
-        this.setState({currentRoom: this.props.currentActiveRoom + 1})
-        
-    }    
-    render(){
+    render(){   
+        console.log(this.props.roomMessages)
+        console.log(this.state.messages, "state messsgeas")
         return(
             <div className='messageList'>
-                
-                 {this.state.messages.map((message,i) =>
-                    <h3 key={i}>{message.content}</h3>
-                    )}
-                 
-                          
-            </div>
+                {this.displayMessages()}              
+            </div>  
         )
     };
     

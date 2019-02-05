@@ -23,24 +23,39 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state ={
-      activeRoom: 1
+      activeRoom: "",
+      mesages: []
     }
   }
   setActiveRoom = (room) =>{
-    this.setState({activeRoom:room.key})
+    this.setState({activeRoom: room})
+    this.setState({messages: this.getRoomMessages(room)})
+
   }
-  
+ 
+  getRoomMessages= (room) =>{
+    let roomMessages = [];
+    let currentRoom = Object.values(room.messages);
+    for(let i = 0; i < currentRoom.length; i++){
+      roomMessages.push(currentRoom[i]);
+    }
+    return roomMessages;
+    
+  }
+
   
   render() {    
-    console.log(this.state.activeRoom)
+    
+    
     return (
+    
       <div className="App">
       <h1>Bloc Chat</h1>
       <div className= 'container-fluid'>
       <div className = 'row'>
         
         <div className ="col-sm-3"><RoomList firebase ={db} setActiveRoom = {(e) => this.setActiveRoom(e)} /></div>
-        <div className ="col-sm-9"><MessageList firebase ={db} currentActiveRoom = {this.state.activeRoom} /></div>
+        <div className ="col-sm-9"><MessageList roomMessages = {this.state.messages} /></div>
         
       </div>
       </div>
