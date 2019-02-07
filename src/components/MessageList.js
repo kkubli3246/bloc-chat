@@ -15,13 +15,11 @@ class MessageList extends Component{
     displayMessages = () => {
         if(this.state.messages !== undefined){
             return this.state.messages.map((message, i) => 
-                <h3>{message.content}</h3>
+                <h3 key={i}>{message.content}</h3>
             );
         }
     }
-    render(){   
-        console.log(this.props.roomMessages)
-        console.log(this.state.messages, "state messsgeas")
+    render(){          
         return(
             <div className='messageList'>
                 {this.displayMessages()}              
