@@ -15,11 +15,11 @@ class MessageList extends Component{
     displayMessages = () => {
         if(this.state.messages !== undefined){
             return this.state.messages.map((message, i) => 
-                <h3 key={i}>{message.content}</h3>
+                <h3 key ={i}>{message.content}</h3>
             );
         }
     }
-    render(){          
+    render(){   
         return(
             <div className='messageList'>
                 {this.displayMessages()}              

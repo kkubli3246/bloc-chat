@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 
 import RoomList from './components/RoomList';
 import MessageList from './components/MessageList';
+import User from './components/User';
 import 'bootstrap';
 import 'hover.css';
 
@@ -16,7 +17,8 @@ import 'hover.css';
     storageBucket: "blocchat-rooms.appspot.com",
     messagingSenderId: "389662709234"
   };
-  let db = firebase.initializeApp(config);
+  const db = firebase.initializeApp(config);
+  const provider = new firebase.auth.GoogleAuthProvider();
  
 class App extends Component {
    
@@ -24,16 +26,17 @@ class App extends Component {
     super(props);
     this.state ={
       activeRoom: "",
-      mesages: []
+      mesages: [],
+      currentUser: ""
     }
-  }
+  };
   setActiveRoom = (room) =>{
-    this.setState({activeRoom: room})
+    this.setState({activeRoom: room});
     this.setState({messages: this.getRoomMessages(room)})
 
   }
  
-  getRoomMessages= (room) =>{
+  getRoomMessages = (room) =>{
     let roomMessages = [];
     let currentRoom = Object.values(room.messages);
     for(let i = 0; i < currentRoom.length; i++){
@@ -42,7 +45,9 @@ class App extends Component {
     return roomMessages;
     
   }
-
+  setUser = (user) => {
+    this.setState({currentUser: user});
+  }
   
   render() {    
     
@@ -50,15 +55,17 @@ class App extends Component {
     return (
     
       <div className="App">
-      <h1>Bloc Chat</h1>
+      <h1>Bloc Chat</h1><User firebase = {db} provider = {provider} setUser ={(e) => this.setUser(e)}/>
       <div className= 'container-fluid'>
       <div className = 'row'>
         
         <div className ="col-sm-3"><RoomList firebase ={db} setActiveRoom = {(e) => this.setActiveRoom(e)} /></div>
         <div className ="col-sm-9"><MessageList roomMessages = {this.state.messages} /></div>
+
         
       </div>
       </div>
+
       </div>
     );
   }
