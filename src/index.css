@@ -16,3 +16,7 @@ code {
 .room-list{
   background-color: rgb(190, 192, 194)
 }
+
+#messagelist{
+  text-align: left;
+}

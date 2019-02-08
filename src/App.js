@@ -27,7 +27,8 @@ class App extends Component {
     this.state ={
       activeRoom: "",
       mesages: [],
-      currentUser: ""
+      currentUser: "Guest",
+      
     }
   };
   setActiveRoom = (room) =>{
@@ -35,6 +36,11 @@ class App extends Component {
     this.setState({messages: this.getRoomMessages(room)})
 
   }
+  messageAdded = () =>{
+    this.setState({messages: this.getRoomMessages(this.state.activeRoom)})    
+    this.forceUpdate();
+  }
+  
  
   getRoomMessages = (room) =>{
     let roomMessages = [];
@@ -42,15 +48,20 @@ class App extends Component {
     for(let i = 0; i < currentRoom.length; i++){
       roomMessages.push(currentRoom[i]);
     }
-    return roomMessages;
     
-  }
+    return roomMessages;
+   
+  } 
   setUser = (user) => {
-    this.setState({currentUser: user});
+    if(user !== null){
+      this.setState({currentUser: user.displayName});
+    }else if(user === null){
+      this.setState({currentUser: "Guest"})
+    }
   }
   
   render() {    
-    
+   
     
     return (
     
@@ -60,7 +71,7 @@ class App extends Component {
       <div className = 'row'>
         
         <div className ="col-sm-3"><RoomList firebase ={db} setActiveRoom = {(e) => this.setActiveRoom(e)} /></div>
-        <div className ="col-sm-9"><MessageList roomMessages = {this.state.messages} /></div>
+        <div className ="col-sm-9"><MessageList firebase = {db} roomMessages = {this.state.messages} userName ={this.state.currentUser} currentRoom = {this.state.activeRoom.key} addMessage = {() => this.messageAdded()}/></div>
 
         
       </div>
