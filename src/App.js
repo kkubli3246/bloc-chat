@@ -33,25 +33,39 @@ class App extends Component {
   };
   setActiveRoom = (room) =>{
     this.setState({activeRoom: room});
-    this.setState({messages: this.getRoomMessages(room)})
+    console.log(room.messages)
+    if(room.messages !== undefined){
+      this.setState({messages: this.getRoomMessages(room)}) 
+    } 
+    else {this.setState({messages: []})}
 
   }
-  messageAdded = () =>{
-    this.setState({messages: this.getRoomMessages(this.state.activeRoom)})    
-    this.forceUpdate();
-  }
   
- 
-  getRoomMessages = (room) =>{
-    let roomMessages = [];
-    let currentRoom = Object.values(room.messages);
-    for(let i = 0; i < currentRoom.length; i++){
-      roomMessages.push(currentRoom[i]);
+  messageAdded = () =>{
+    if(this.state.activeRoom !== ""){
+      this.messageRef = db.database().ref('rooms/'+this.state.activeRoom.key+'/messages/')
+      this.messageRef.on('child_added', snapshot => {
+        const mess = snapshot.val();
+        mess.key = snapshot.key;
+        this.setState({
+            messages: this.state.messages.concat(mess)
+        })            
+      }); 
     }
+  }
+
+  getRoomMessages = (room) =>{
+      
+      let roomMessages = [];    
+      let currentRoom = Object.values(room.messages);
+      
+      for(let i = 0; i < currentRoom.length; i++){
+        roomMessages.push(currentRoom[i]);
+      }    
+      return roomMessages;
     
-    return roomMessages;
    
-  } 
+  }
   setUser = (user) => {
     if(user !== null){
       this.setState({currentUser: user.displayName});
@@ -61,7 +75,7 @@ class App extends Component {
   }
   
   render() {    
-   
+    
     
     return (
     
@@ -71,7 +85,15 @@ class App extends Component {
       <div className = 'row'>
         
         <div className ="col-sm-3"><RoomList firebase ={db} setActiveRoom = {(e) => this.setActiveRoom(e)} /></div>
-        <div className ="col-sm-9"><MessageList firebase = {db} roomMessages = {this.state.messages} userName ={this.state.currentUser} currentRoom = {this.state.activeRoom.key} addMessage = {() => this.messageAdded()}/></div>
+        <div className ="col-sm-9">
+          <MessageList 
+            firebase = {db} 
+            roomMessages = {this.state.messages} 
+            userName ={this.state.currentUser} 
+            currentRoom = {this.state.activeRoom.key} 
+            addMessage = {()=> this.messageAdded()}
+            />
+        </div>
 
         
       </div>

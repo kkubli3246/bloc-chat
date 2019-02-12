@@ -4,12 +4,12 @@ class MessageList extends Component{
     constructor(props){
         super(props);
         this.state = {
-            messages: this.props.roomMessages,
-            currentRoom: 'rooms/'+this.props.currentRoom+'/messages',
-            sendMes: '', 
-            canSubmit: false
-        }    
-        this.messagesRef = this.props.firebase.database().ref(this.state.currentRoom);
+        messages: this.props.roomMessages,
+        currentRoom: 'rooms/'+this.props.currentRoom+'/messages',
+        sendMes: '', 
+        canSubmit: false
+    }    	            
+    this.messagesRef = this.props.firebase.database().ref(this.state.currentRoom);
     }
     componentWillReceiveProps = (nextProps) =>{
         if(nextProps.roomMessages !== this.props.roomMessages){

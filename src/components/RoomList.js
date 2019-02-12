@@ -11,24 +11,18 @@ class RoomList extends Component {
             isHover: '',
             
         };
-
-        this.roomsRef = this.props.firebase.database().ref('rooms')
-        
+        this.roomsRef = this.props.firebase.database().ref('rooms')      
        
     }
 
-    componentDidMount() {
-        this.roomsRef = this.props.firebase.database().ref('rooms')
+    componentDidMount() {       
         this.roomsRef.on('child_added', snapshot => {
             const room = snapshot.val();
             room.key = snapshot.key;
             this.setState({
                 rooms: this.state.rooms.concat(room)
             })            
-        });
-
-        
-        
+        });        
     }
 
     handleSubmit = (e) => {
@@ -41,7 +35,11 @@ class RoomList extends Component {
     createRoom = () => {
         if (this.state.newRoomName.replace(/\s/g, '').length > 0) {
             this.roomsRef.push({
-                name: this.state.newRoomName
+                name: this.state.newRoomName,
+                messages: 
+                    {
+                        first: {content: 'welcome', username: 'To Everyone'}
+                    }
             });
         }
     }
@@ -51,7 +49,7 @@ class RoomList extends Component {
         })
     }
     handleClick = (room) =>{       
-        this.props.setActiveRoom(room);       
+        this.props.setActiveRoom(room);    
             
     }
 
